@@ -4,6 +4,7 @@ const { AUTH_JWT_SECRET } = require('../config/env')
 
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
+//TODO: what algorythem use in the creation of jwt ? 
 const createToken = (id) => {
   return jwt.sign({ id }, AUTH_JWT_SECRET, {
     expiresIn: maxAge
