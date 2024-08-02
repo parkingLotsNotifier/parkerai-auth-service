@@ -1,0 +1,7 @@
+*.yaml
+node_modules/
+*.env
+package-lock.json
+test.js
+*.DS_Store
+*.txt
