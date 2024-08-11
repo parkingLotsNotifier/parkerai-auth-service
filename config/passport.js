@@ -1,6 +1,6 @@
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
-const userSchema = require('../models/user');
+const userSchema = require('../models/User');
 const {AUTH_JWT_SECRET} = require('../config/env');
 
 const cookieExtractor = req => {

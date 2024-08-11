@@ -13,9 +13,5 @@ router.get('/protected', passport.authenticate('jwt', { session: false }), (req,
   res.status(200).json({ message: 'You have accessed a protected route!' });
 });
 
-// Camera routes
-router.post('/register-camera', passport.authenticate('jwt', { session: false }), authController.register_camera);
-router.delete('/remove-camera', passport.authenticate('jwt', { session: false }), authController.remove_camera);
-router.post('/check-camera', passport.authenticate('jwt', { session: false }), authController.check_camera);
 
 module.exports = router;

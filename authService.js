@@ -10,9 +10,9 @@ require('./config/passport'); // Include passport configuration
 
 database.connect(AUTH_DB_USERNAME, AUTH_DB_PASSWORD, AUTH_DB_HOST).then(() => {
 const app = express();
-app.use(cors())
-
 // middleware
+
+app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());

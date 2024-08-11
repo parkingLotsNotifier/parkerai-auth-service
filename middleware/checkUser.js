@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const userSchema = require('../models/user');
+const userSchema = require('../models/User');
 const {AUTH_JWT_SECRET} = require('../config/env');
 
 const checkUser = (req, res, next) => {
