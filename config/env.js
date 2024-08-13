@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const env = {
     
-    AUTH_PORT : process.env.AUTH_PORT,
+    AUTH_SERVICE_SERVICE_PORT : process.env.AUTH_SERVICE_SERVICE_PORT,
     
     AUTH_JWT_SECRET : process.env.AUTH_JWT_SECRET,
 
