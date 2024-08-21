@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const { AUTH_MAX_AGE } = require("../config/env");
+const { REFRESH_TOKEN_MAX_AGE } = require("../config/env");
 const {
   createAccessToken,
   createRefreshToken,
@@ -9,12 +9,12 @@ const handleErrors = require("../helpers/errorHelper");
 
 const registrationHandler = async (req, res) => {
   const { username, email, password, role } = req.body;
-
   try {
     const salt = await bcrypt.genSalt();
     const encryptedPassword = await bcrypt.hash(password, salt);
     const refreshToken = createRefreshToken(email);
-    const accessToken = createAccessToken(email, { role: user.role });
+    const accessToken = createAccessToken(email, role);
+
     const user = await User.create({
       username,
       email,
@@ -29,7 +29,7 @@ const registrationHandler = async (req, res) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: false,
-      maxAge: AUTH_MAX_AGE * 1000,
+      maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
       sameSite: "None",
     });
 

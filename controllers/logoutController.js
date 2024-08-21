@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { AUTH_MAX_AGE } = require("../config/env");
+const { REFRESH_TOKEN_MAX_AGE } = require("../config/env");
 const handleErrors = require("../helpers/errorHelper");
 
 const logoutHandler = async (req, res) => {
@@ -9,18 +9,17 @@ const logoutHandler = async (req, res) => {
   const refreshToken = cookies.jwt;
 
   try {
-    // is refresh token in db ?
-    const user = await User.findOne({ refreshToken: refreshToken });
-    if (user._id) {
-      user.refreshToken = " ";
+    // Delete the refreshToken in db
+    const user = await User.findOne({ refreshToken: refreshToken }).exec();
+    if (user) {
+      user.refreshToken = user.refreshToken.filter((rt) => rt !== refreshToken);
       await user.save();
     }
 
-    // Delete the refreshToken in db
     res.clearCookie("jwt", {
       httpOnly: true,
       secure: false,
-      maxAge: AUTH_MAX_AGE * 1000,
+      maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
       sameSite: "None",
     });
 

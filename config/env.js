@@ -11,7 +11,8 @@ const env = {
     AUTH_DB_PASSWORD : process.env.AUTH_DB_PASSWORD,
     AUTH_DB_HOST : process.env.AUTH_DB_HOST,
 
-    AUTH_MAX_AGE : 3 * 24 * 60 * 60
+    REFRESH_TOKEN_MAX_AGE : 3 * 24 * 60 * 60,
+    ACCESS_TOKEN_MAX_AGE: "10s"
 
 }
 
