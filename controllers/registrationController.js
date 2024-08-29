@@ -8,10 +8,22 @@ const {
 const handleErrors = require("../helpers/errorHelper");
 
 const registrationHandler = async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const {
+    username,
+    email,
+    password,
+    role,
+    firstName,
+    lastName,
+    companyName,
+    address,
+    phoneNumber,
+  } = req.body;
+
   try {
     const salt = await bcrypt.genSalt();
     const encryptedPassword = await bcrypt.hash(password, salt);
+    
     const refreshToken = createRefreshToken(email);
     const accessToken = createAccessToken(email, role);
 
@@ -21,6 +33,11 @@ const registrationHandler = async (req, res) => {
       password: encryptedPassword,
       refreshToken,
       role,
+      firstName,
+      lastName,
+      companyName,
+      address,
+      phoneNumber,
     });
 
     // Set cookies for JWT and userId
@@ -30,11 +47,14 @@ const registrationHandler = async (req, res) => {
       httpOnly: true,
       secure: false,
       maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
-      sameSite: "None",
+      sameSite: "Lax",
+      path: "/",
     });
+    console.log("coockie sent");
 
     // Send Access token along with user id
     res.status(201).json({ accessToken, userId: user._id });
+    console.log("response 200 sent");
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });

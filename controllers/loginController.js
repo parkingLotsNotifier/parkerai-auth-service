@@ -11,14 +11,14 @@ const handleErrors = require("../helpers/errorHelper");
 const loginHandler = async (req, res) => {
   const cookies = req.cookies;
   const { email, password } = req.body;
-  const user = await User.findOne({ email }).exec();
 
   try {
-    if (!user) return res.sendStatus(403).json("incorrect Email");
+    const user = await User.findOne({ email }).exec();
+    if (!user) return res.status(403).json("incorrect Email");
     else {
       const auth = await bcrypt.compare(password, user.password);
       if (!auth) {
-        return res.sendStatus(403).json({ error: "incorrect password" });
+        return res.status(403).json({ error: "incorrect password" });
       } else if (auth) {
         // user entered valid information
         const newRrefreshToken = createRefreshToken(email);
@@ -31,6 +31,7 @@ const loginHandler = async (req, res) => {
           const hackedUser = await User.findOne({
             refreshToken: cookies.jwt,
           }).exec();
+
           if (!hackedUser) {
             newRefreshTokenArray = [];
           }
@@ -40,7 +41,8 @@ const loginHandler = async (req, res) => {
             httpOnly: true,
             secure: false,
             maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
-            sameSite: "None",
+            sameSite: "Lax",
+             path:'/'
           });
         }
         const accessToken = createAccessToken(email, { role: user.role });
@@ -54,16 +56,19 @@ const loginHandler = async (req, res) => {
           httpOnly: true,
           secure: false,
           maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
-          sameSite: "None",
+          sameSite: "Lax",
+          path:'/'
         });
+        console.log("login coockie sent");
 
         // Send success message
         res.status(200).json({ userId: user._id, accessToken });
+        console.log("status 200");
       }
     }
   } catch (err) {
     const errors = handleErrors(err);
-    return res.status(400).json({ errors });
+    res.status(400).json({ errors });
   }
 };
 

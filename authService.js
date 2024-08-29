@@ -11,7 +11,15 @@ database.connect(AUTH_DB_USERNAME, AUTH_DB_PASSWORD, AUTH_DB_HOST).then(() => {
 const app = express();
 // middleware
 
-app.use(cors())
+// CORS configuration
+app.use(cors({
+  origin: ['http://localhost:3002','http://localhost:3000'], 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow standard HTTP methods
+  allowedHeaders: 'Content-Type,Authorization', // Allow specific headers
+  credentials: true, // Allow credentials like cookies
+  exposedHeaders: ['Authorization'], // Expose additional headers if needed
+  maxAge: 600 // Cache the preflight request for 10 minutes
+}));
 app.use(express.json());
 
 // built-in middleware to handle urlencoded form data

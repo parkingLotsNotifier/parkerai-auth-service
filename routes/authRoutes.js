@@ -8,7 +8,7 @@ const router = Router();
 
 router.post('/signup', registrationController.registrationHandler);
 router.post('/login', loginController.loginHandler);
-router.get('/logout', logoutController.logoutHandler);
+router.post('/logout', logoutController.logoutHandler);
 router.get('/refresh',refreshController.handleRefreshToken);
 
 module.exports = router;

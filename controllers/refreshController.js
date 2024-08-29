@@ -29,8 +29,11 @@ const handleRefreshToken = async (req, res) => {
 
       // 2. detect reuse of refreshToken which mean user has been hacked
       const hackedUser = await User.findOne({ email: decoded.email }).exec();
-      hackedUser.refreshToken = [];
-      await hackedUser.save();
+      if(hackedUser){
+        hackedUser.refreshToken = [];
+        await hackedUser.save();
+      }
+      else return res.status(400);
     });
 
     return res.sendStatus(403);
@@ -67,10 +70,10 @@ const handleRefreshToken = async (req, res) => {
       httpOnly: true,
       secure: false,
       maxAge: REFRESH_TOKEN_MAX_AGE * 1000,
-      sameSite: "None",
+      sameSite: "Lax",
+      path:"/"
     });
-
-    return res.json({ accessToken });
+    return res.status(200).json({ userId:user._id,accessToken });
   });
 };
 
